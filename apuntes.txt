@@ -1,0 +1,293 @@
+Clase 14:
+- bool, char, wchar_t, char16_t, char32_t, short, int, long
+- void se usa para pointers y funciones
+- Modificadores:
+    * integers: signed, unsigned, short y long
+    * todos: const, volatile, static
+- <climits> o <limits.h> son macros que representan los rangos de cada
+tipo
+- float f = 1.283f;
+  double d = 521.342;
+  int arr1[5] = {1,2,3,4,5};
+- uniform initilialization: <var> name {values}
+
+
+Clase 15:
+- std::basic_ostream & std::basic_istream
+- std::ostream & std::istream
+- std::cout & std::cin
+    Objetos de ostream y istream
+- cin.getline(<var_name>, length, delimeter)
+
+
+Clase 16:
+- El exit code es lo que retorna el main() en C++
+
+
+Clase 17:
+- Para usar funciones, se requiere un prototipo al inicio y una
+    definición después del main
+
+    // Prototipo
+    int Add(int x, int y);
+    // Definición
+    int Add(int x, int y) { }
+- En el math.cpp se coloca la descripción
+- En el math.h se coloca el prototipo y se invoca el .cpp asociado
+- En el main se invoca SOLO el .h
+    #include "math.h"
+- Para casos de inline functions y function templates que son
+    especiales, basta con colocarlos antes del main dentro del mismo
+    .cpp sin prototipo
+- Se pueden incluir funciones dentro de clases, a esto se denomina como
+member functions
+
+
+Clase 19:
+- C++11 surge el uniform inicialization usando llaves
+- int b1{}; //Value initilialization
+  int b2{5}; //Direct inicialization
+  int b3 = 5; //Copy inicialization, se recomienda obviar para Objetos
+  definidos por el usuario
+
+
+Clase 20:
+- Un puntero refiere la dirección de otra variable
+- int * ptr;
+  int *p1, *p2, *p3, p4; //Este último no es un puntero
+- & operator to get de address
+- * deference operator para obtener el valor a partir de un address
+- int x = 10;
+  int *ptr = &x;
+  *ptr = 5; //Assign 5 to address of x
+  int y = *ptr; //Read a value from address of x
+- Para inicializar pointers se usaba NULL (C y pre-C++11)
+- Desde C++11 se puede usar nullptr (más seguro y mejor que la macro
+    NULL)
+- No se puede leer ni escribir desde un null pointer (tipo nullptr)
+- Al usar *b = &a e imprimir a, b y *b, se devuelve lo siguiente:
+    a devuelve la variable con el valor asigndao
+    *b devuelve el valor de a
+    b devuelve la dirección de memoria de a
+    &b devuelve la dirección de b
+- El tipo int * es diferente a int
+
+
+Clase 22:
+- References es un alias, se crea con & durante la declaración y siempre
+    requiere un inicializador
+- Debería ser una variable y no una constante
+- Se puede usar para modificar una variable indirectamente como un
+    puntero
+- Una referencia NO es una nueva variable
+- Se declara como:
+    int &ref = x;
+- Tienen la misma dirección
+- No requiere más almacenamiento a diferencia de un puntero, no se puede
+    inicializar como nullptr
+
+
+Clase 24:
+- References no necesita de verificar que el puntero sea de tipo nullptr
+    a diferencia de un puntero, lo cual complejiza la programación
+
+
+Clase 25:
+- Cuando se usa const no se puede cambiar su valor ni declararlo sin
+    inicializar porque devuelve un error de compilación
+- Reemplaza los C macros. Estos tienen desventajas:
+    No son type safe
+    No tienen un scope así que se usará indiscriminadamente en cualquier
+      lugar del código
+    Pueden desencadera subtle bugs difíciles de debuggear
+- Se suelen usar cuando se envía un argumento por referencia
+- const float PI { 3.14f };
+- Se usan mayúsculas
+
+
+Clase 26:
+- No se puede asignar un puntero a una constante, pues no es modificable
+- Solo se puede asignar si el puntero también es constante
+    const int CHUNK_SIZE = 512;
+    const int *ptr = &CHUNK_SIZE;
+- Esto genera que el puntero sea constante, pero no la dirección a la
+    cual está asignado, es decir,
+    ptr = &x; //OK
+    *ptr = 1; //ERROR
+- También se puede hacer constante la dirección para que el puntero sea
+    inmutable tanto su valor como su dirección
+    const int *const ptr = &CHUNK_SIZE;
+- Se puede crear una referencia constante (const &x) a un literal (valor)
+- Cuando se manda una variable con reference se suele incluir al crear
+    la función un valor const
+    void Print(const int &ref) para que no pueda cambiar su valor
+    durante sus operaciones en la función y pueda aceptar literales como
+    argumento
+- Se prefiere por encima de los punteros, por su sintaxis más simple
+- int *const p = &x ;
+    Se lee de derecha a izquierda por lo que p es un puntero constante
+
+
+Clase 28:
+- Remanente de B
+- Permite al compilador inferir el tipo por el inicializador
+- auto <identifier> = <initializer>
+- Trabaja con const y static
+- auto tiene su utilidad con lambda expressions y templates
+- Si se asigna un const a un auto, la nueva variable no es const, pero
+    si se asigna una variable a un auto reference este último sí es un
+    const
+- Se sugiere no usar auto al inicializar punteros
+
+
+Clase 29:
+- Range-Based For
+- for (const auto & x : arr) {
+		
+		cout << x << " ";
+	}
+- Al usar auto se crea cada vez un nuevo valor en x, por ello se usa &
+    para referencia, pero si se modifica el x dentro del for, esto
+    afectará a los valores del arr que han sido asignados a la
+    referencia; por ello, se usa el const
+
+
+Clase 30:
+- En un arreglo, cada valor tiene la dirección de memoria siguiente; por
+    ello, ++beg devuelve la dirección siguiente a beg
+- std::begin(arr) y std::end(arr) devuelven el primer y último miembro
+    de un arreglo. Está incluido en las librerías <array>, <deque>,
+    <forward_list>, <iterator>, <list>, <map>, <set>
+
+
+Clase 31:
+- El overloading solo funciona cuando los argumentos son de diferentes
+    tipos
+- int *x / const int* x son dos tipos diferentes de argumentos:
+    el primero es para int x = 1 y se manda &x
+    el segundo es para const int x = 1 y se manda &x
+- El tipo de retorno de la función no está involucrado en el
+    overloading, pero sí los punteros y referencias y para member
+    functions, los qualifiers también participan
+- Se resuleve en tiempo de compilación
+- La forma en que se diferencias estas funciones es con el Name
+    Mangling, el compilador genera nombres únicos para las funciones, lo
+    cual permite al linker linkear la correctia funcion overlodeada
+- No se pueden invocar funciones de C++ en C, a menos que se use
+    extern C
+- C++ incluye extern C, el cual es una directiva del compilador aplicado
+    en funciones globales y variables. Permite ejecutar funciones de C++
+    en C y otros lenguajes, solo se puede aplicar a una sola función
+    overlodeada
+- // In .h file
+  extern "C" <function declaration>;
+  // In .cpp file
+  extern "C" <function definition> {
+
+  }
+- El extern "C" del .cpp puede obviarse si se invoca el header con los
+    prototipos que ya incluyan el extern "C"
+
+
+Clase 32:
+- Permite asignar valores por defecto a algunos o todos los argumentos
+    de una función
+- Argumentos por default deben de iniciar por la derecha en la lista de
+    argumentos
+
+
+Clase 33:
+- En las funciones normales, cuando se ejecuta, se va arriba se asigna
+    espacio de memoria en el stack y luego se usa el return para
+    regresar a donde se invocó. En algunos casos esto no es aceptable
+- Una opción es usar macros, la cual expande su descripción:
+    #define Square(x) x*x, pero hay riesgo si se manda val + 1 como x,
+    saldría 11 en vez de 25
+- La opción adecuada es usar inline functions en la cual lo que se
+    expande es el cuerpo de la función en donde esta es invocada:
+      el val+1 se evalúa y luego recién se manda como argumento al
+      cuerpo de la función
+- SIEMPRE se declaran en un header file
+- El inline es un request al compilador, a veces puede ser ignorado:
+    funciones largas
+    funciones con muchas condicionales
+    funciones recursivas
+    funciones invocadas por punteros
+    etc
+- Solo debería de usarse para funciones pequeñas porque puede aumentar
+    el tamaño del binario
+- Macros no se pueden usar para funciones de clases a diferencia del
+    inline
+
+
+Clase 34:
+- Punteros de funciones tienen la dirección de la función
+- Se puede invocar una función aún sin saber el nombre de la función
+- Usado por algoritmos y clases para customization:
+    <ret> (*fnptr)(args) = &Function
+    int (*PtrAdd)(int,int) = &Add //int Add(int, int)
+- //Crear el puntero de la función Print
+  void(*pfn) (int, char) = Print;
+	//Primera forma de invocar el puntero
+	(*pfn)(8, '@');
+	//Segunda forma de invocar el puntero
+	pfn(5, '+');
+- atexit(function), no importa en qué parte esté, se ejecutará al final
+    de todo
+
+
+Clase 35:
+- Región usada para declaring types (functions, classes, structures o
+    variables)
+- Los declaring types no son visibles fuera del namespace
+- Standar library está dentro del std namespace
+- Previenen name clashes (dos tipos con el mismo nombre que no permitan
+    compilar). Solución: cada uno es declarado en un namespace
+- Un namespace puede contener otro namespace
+- namespace <name> {
+    (namespace, class, structure, function, variable, etc)
+  }
+- El scope de un namespace es solo en donde es invocado, no se sugiere
+    invocar todo el namespace
+- Se puede usar solo una parte del namespace como
+    using std::cout;
+- También se puede usar directamente std::cout
+- Las variables en un namespace sin nombre se pueden usar directamente
+    dentro del mismo .cpp donde se creó este namespace, no se puede usar
+    fuera de este .cpp
+- Se debe evitar usar un namespace en un global scope
+
+
+Clase 36:
+- Áreas de memoria:
+    stack: Automático alocado para variables locales por el runtime
+    data section: Alocar para data global y estática
+    heap: Alocar memoria en runtime
+- La memoria es tomada del process address space, la cual se crea
+    automáticamente cuando se corre un programa
+- C/C++ permite memory allocation at runtime (dynamic memory allocation)
+- CUALQUIER ALLOCAION EN EL HEAP ES HECHA POR EL PROGRAMADOR; por ello,
+    el programador debe de liberar la memoria
+- Stack y Data section son manejados por el runtime
+- Para C:
+    malloc: allocate raw memory on the heap. Un solo argumento, si se
+      quiere alocar un arreglo de 5 ints, se hace
+        int *p = (int*)malloc(5 * sizeof(int));
+    calloc: malloc and initializes it to zero. Primer arg es el número
+      de elementos que se quieren alocar en tipo arreglo y el segundo el
+      tamaño de los elementos
+    realloc: allocates larger chunk of memory for an existing allocation
+    free: deallocates/releases the memory allocated through the above
+      functions. Esto convierte al puntero en un dangling pointer que es
+      muy peligroso por ser una dirección de memoria inválida. Por ello,
+      se debe de asignar NULL al puntero
+- C puede castear un void pointer a cualquier otro tipo, en caso de C++,
+    eso no es posible, se requiere un casteo visible
+- SIEMPRE verificar que lo que devuelva el alocador NO sea un NULL
+    (significa que no se pudo alocar memoria)
+- Memory leaked ocurre cuando no se libera la memoria con free. Es un
+    riesgo muy grande en C/C++
+
+
+Clase 37:
+- 
